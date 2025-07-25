@@ -1,17 +1,77 @@
 "use client"
 
-import ProtectedPage from "@/components/pages/Protected"
-import { Button } from "@/components/ui/button"
-import { MobileSidebar } from "@/components/layouts/Sidebars/Mobile"
-import { DesktopSidebar } from "@/components/layouts/Sidebars/Desktop"
-import { useSession } from "@/lib/auth-client"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { categories, levels, fee, sortOptions } from "@/constants/competitionFilters"
-import { Input } from "@/components/ui/input"
-import { CompetitionsCard } from "@/components/ui/Cards/competitions"
+import { api } from "@/lib/trpc/react";
+import { useSession } from "@/lib/auth-client";
+import ProtectedPage from "@/components/pages/Protected";
+import { DesktopSidebar } from "@/components/layouts/Sidebars/Desktop";
+import { MobileSidebar } from "@/components/layouts/Sidebars/Mobile";
+import {
+  categories,
+  levels,
+  fee,
+  sortOptions,
+} from "@/constants/competitionFilters";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { useEffect, useState } from "react";
+import { useInView } from "react-intersection-observer";
+import { CompetitionsCard } from "@/components/ui/Cards/competitions";
 
 export default function CompetitionsPage() {
-  const { data } = useSession()
+  const { data: session} = useSession();
+
+  const [search, setSearch] = useState("");
+  const [searchQuery, setSearchQuery] = useState("");
+  const [selectedLevel, setSelectedLevel] = useState<string>();
+  const [selectedCategory, setSelectedCategory] = useState<string>();
+  const [selectedFee, setSelectedFee] = useState<string>();
+  const [selectedSort, setSelectedSort] = useState<"newest" | "oldest">("newest");
+
+  const { ref, inView } = useInView();
+
+  const {
+    data,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+  } = api.competitions.getInfiniteCompetitions.useInfiniteQuery(
+    session
+      ? {
+          limit: 6,
+          search: searchQuery,
+          level: selectedLevel,
+          category: selectedCategory,
+          isPaid:
+            selectedFee === "Free"
+              ? false
+              : selectedFee === "Paid"
+              ? true
+              : undefined,
+          sort: selectedSort,
+        }
+      : { limit: 6 }, // fallback input to avoid undefined
+    {
+      enabled: !!session, // run only when session exists
+      getNextPageParam: (lastPage) => lastPage.nextCursor,
+    }
+  );
+
+  useEffect(() => {
+    if (inView && hasNextPage) {
+      fetchNextPage();
+    }
+  }, [inView, hasNextPage, fetchNextPage]);
+
+  const handleSearch = () => {
+    setSearchQuery(search);
+  };
 
   return (
     <ProtectedPage>
@@ -31,47 +91,86 @@ export default function CompetitionsPage() {
                   Discover Competitions.
                 </h2>
                 <p className="text-base md:text-lg text-muted-foreground">
-                  Discover and participate in various competitions tailored for students. Join the community and enhance your skills!
+                  Discover and participate in various competitions tailored for
+                  students. Join the community and enhance your skills!
                 </p>
                 <hr />
                 <div className="flex flex-wrap gap-4 my-4">
                   <div className="flex mr-auto gap-4">
-                    <Input placeholder="Search competitions" />
-                    <Button>Search</Button>
+                    <Input
+                      placeholder="Search competitions"
+                      value={search}
+                      onChange={(e) => setSearch(e.target.value)}
+                    />
+                    <Button onClick={handleSearch}>Search</Button>
                   </div>
-                  {[categories, levels, fee, sortOptions].map((filter) => (
-                    <Select key={filter.placeholder}>
-                      <SelectTrigger className="w-[180px]">
-                        <SelectValue placeholder={filter.placeholder} />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {filter.options.map((option) => (
-                          <SelectItem key={option} value={option}>
-                            {option}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                  ))}
+                  <Select onValueChange={setSelectedCategory}>
+                    <SelectTrigger className="w-[180px]">
+                      <SelectValue placeholder="Category" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {categories.options.map((option) => (
+                        <SelectItem key={option} value={option}>
+                          {option}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <Select onValueChange={setSelectedLevel}>
+                    <SelectTrigger className="w-[180px]">
+                      <SelectValue placeholder="Level" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {levels.options.map((option) => (
+                        <SelectItem key={option} value={option}>
+                          {option}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <Select onValueChange={setSelectedFee}>
+                    <SelectTrigger className="w-[180px]">
+                      <SelectValue placeholder="Fee" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {fee.options.map((option) => (
+                        <SelectItem key={option} value={option}>
+                          {option}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <Select onValueChange={(v) => setSelectedSort(v as any)}>
+                    <SelectTrigger className="w-[180px]">
+                      <SelectValue placeholder="Sort" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {sortOptions.options.map((option) => (
+                        <SelectItem key={option} value={option.toLowerCase()}>
+                          {option}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
                 </div>
+
                 <div className="flex flex-wrap gap-4 my-7">
-                    {[...Array(10)].map((_, i) => (
-                        <CompetitionsCard competition={{
-                            competitionName: "Jakarta Coding Competition",
-                            description: "lorem1 ipsum dolor sit amet consectetur adipisicing elit. Quisquam, voluptatum.",
-                            level: ["High School", "Junior High School"],
-                            category: ["Technology", "Science"],
-                            isPaid: false,
-                            sourceUrl: "https://example.com",
-                            posterImageUrl: "/assets/poster.png"
-                        }} key={i}/>
-                    ))}
-                  </div>
+                  {data?.pages.flatMap((page) =>
+                    page.items.map((comp) => (
+                      <CompetitionsCard competition={comp} key={comp.id} />
+                    ))
+                  )}
+                </div>
+
+                {isFetchingNextPage && (
+                  <p className="text-muted text-center">Loading more...</p>
+                )}
+                <div ref={ref} className="h-4" />
               </div>
             </div>
           </main>
         </div>
       </div>
     </ProtectedPage>
-  )
+  );
 }

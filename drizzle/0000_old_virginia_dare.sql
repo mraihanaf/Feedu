@@ -1,3 +1,43 @@
+CREATE TYPE "public"."note_level" AS ENUM('High School', 'Junior High School', 'Vocational High School', 'Elementary School', 'College');--> statement-breakpoint
+CREATE TYPE "public"."note_subject" AS ENUM('Physics', 'Chemistry', 'Mathematics', 'Biology', 'Economics', 'History');--> statement-breakpoint
+CREATE TYPE "public"."note_type" AS ENUM('markdown', 'image');--> statement-breakpoint
+CREATE TABLE "competitions" (
+	"id" text PRIMARY KEY NOT NULL,
+	"competition_name" text NOT NULL,
+	"description" text NOT NULL,
+	"level" text[] NOT NULL,
+	"category" text[] NOT NULL,
+	"is_paid" boolean NOT NULL,
+	"source_url" text NOT NULL,
+	"poster_image_url" text NOT NULL,
+	"created_at" timestamp DEFAULT now() NOT NULL
+);
+--> statement-breakpoint
+CREATE TABLE "events" (
+	"id" text PRIMARY KEY NOT NULL,
+	"event_name" text NOT NULL,
+	"description" text NOT NULL,
+	"audience" text[] NOT NULL,
+	"category" text[] NOT NULL,
+	"is_paid" boolean NOT NULL,
+	"event_date" text,
+	"source_url" text NOT NULL,
+	"poster_image_url" text NOT NULL,
+	"created_at" timestamp DEFAULT now() NOT NULL
+);
+--> statement-breakpoint
+CREATE TABLE "notes" (
+	"id" text PRIMARY KEY NOT NULL,
+	"title" text NOT NULL,
+	"type" "note_type" NOT NULL,
+	"markdown_content" text,
+	"image_url" text,
+	"created_at" timestamp DEFAULT now() NOT NULL,
+	"level" "note_level",
+	"subject" "note_subject",
+	"href" text
+);
+--> statement-breakpoint
 CREATE TABLE "account" (
 	"id" text PRIMARY KEY NOT NULL,
 	"account_id" text NOT NULL,
