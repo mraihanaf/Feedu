@@ -3,8 +3,9 @@ import { SidebarContent } from "./Content"
 
 export function DesktopSidebar() {
     return (
-        <div className="hidden md:flex min-w-2xs w-fit h-screen border-r max-w-fit">
-            <SidebarContent />
-        </div>
+      <div className="hidden md:flex fixed top-0 left-0 h-screen w-64 border-r z-50 bg-background">
+        <SidebarContent />
+      </div>
     )
-}
+  }
+  
