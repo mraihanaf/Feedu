@@ -17,12 +17,12 @@ export const navigationItems: NavigationItems = [
         url: "/home",
     },
     {
-        title: "Competitions Aggregator",
+        title: "Discover Competitions",
         icon: TrophyIcon,
         url: "/competitions",
     },
     {
-        title: "Events Aggregator",
+        title: "Discover Events",
         icon: UsersIcon,
         url: "/events",
     },
