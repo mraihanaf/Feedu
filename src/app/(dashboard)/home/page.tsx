@@ -18,7 +18,7 @@ export default function HomePage() {
         <ProtectedPage>
             <div className="flex h-screen w-full">
                 <DesktopSidebar />
-                <div className="flex-1 flex flex-col">
+                <div className="flex-1 flex flex-col md:pl-64">
                     <header className="h-16 border-b px-4 md:px-6 flex items-center gap-4">
                         <div className="hidden md:flex md:flex-col">
                             <h1 className="text-lg font-semibold">Home</h1>
@@ -32,20 +32,17 @@ export default function HomePage() {
                                     Hello, {data?.user.name}.
                                 </h2>
                                 <p className="text-base md:text-lg text-muted-foreground">
-                                    Lorem ipsum dolor sit amet consectetur
-                                    adipisicing elit. Corrupti sapiente
-                                    similique quam aliquid velit quidem officia
-                                    ea, eveniet est molestias?
+                                Welcome to Feedu — The Student{"'"}s Hub for Competitions, Events, and Shared Notes.
                                 </p>
                             </div>
 
                             <div className="grid gap-4 md:gap-6 grid-cols-1 md:grid-cols-2">
                                 <Card>
                                     <CardHeader>
-                                        <CardTitle className="text-base md:text-lg">
-                                            Lorem, ipsum.
+                                        <CardTitle className="text-sm font-normal">
+                                            You{"'"}ve got
                                         </CardTitle>
-                                        <CardDescription className="text-sm">
+                                        <CardDescription className="text-base md:text-lg font-bold text-black">
                                             Lorem ipsum dolor sit amet.
                                         </CardDescription>
                                     </CardHeader>
