@@ -9,7 +9,6 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { categories, levels, fee, sortOptions } from "@/constants/competitionFilters"
 import { Input } from "@/components/ui/input"
 import { CompetitionsCard } from "@/components/ui/Cards/competitions"
-import { postRouter } from "@/server/api/routers/post"
 
 export default function CompetitionsPage() {
   const { data } = useSession()

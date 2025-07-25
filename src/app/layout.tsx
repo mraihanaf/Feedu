@@ -1,40 +1,35 @@
-import type { Metadata } from "next"
-import { Geist, Geist_Mono } from "next/font/google"
-import { TRPCReactProvider } from "@/trpc/react"
-import { Toaster } from "sonner"
-import "./globals.css"
+// src/app/layout.tsx (Server Component — no "use client")
+import { Geist, Geist_Mono } from "next/font/google";
+import "./globals.css";
+import { Toaster } from "sonner";
+import TRPCProvider from "./_providers/trpc-provider";
 
 const geistSans = Geist({
-    variable: "--font-geist-sans",
-    subsets: ["latin"],
-})
+  variable: "--font-geist-sans",
+  subsets: ["latin"],
+});
 
 const geistMono = Geist_Mono({
-    variable: "--font-geist-mono",
-    subsets: ["latin"],
-})
+  variable: "--font-geist-mono",
+  subsets: ["latin"],
+});
 
-export const metadata: Metadata = {
-    title: "Feedu",
-    description:
-        "Competitions, Events Aggregator & Notes Sharing for Students.",
-}
+export const metadata = {
+  title: "Feedu",
+  description: "Competitions, Events Aggregator & Notes Sharing for Students.",
+};
 
 export default function RootLayout({
-    children,
+  children,
 }: Readonly<{
-    children: React.ReactNode
+  children: React.ReactNode;
 }>) {
-    return (
-        <html lang="en">
-            <body
-                className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-            >
-                <TRPCReactProvider>
-                    {children}
-                </TRPCReactProvider>   
-                <Toaster />
-            </body>
-        </html>
-    )
+  return (
+    <html lang="en">
+      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+        <TRPCProvider>{children}</TRPCProvider>
+        <Toaster />
+      </body>
+    </html>
+  );
 }
