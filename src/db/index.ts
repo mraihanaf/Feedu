@@ -1,23 +1,26 @@
-import { neon } from "@neondatabase/serverless"
-import { drizzle as drizzleNeon } from "drizzle-orm/neon-http"
-import { drizzle as drizzlePostgres } from "drizzle-orm/node-postgres"
-import * as AuthSchema from "@/../auth-schema"
-import * as DBSchema from "@/db/schema"
+import { neon } from "@neondatabase/serverless";
+import { drizzle as drizzleNeon } from "drizzle-orm/neon-http";
+import { drizzle as drizzlePostgres } from "drizzle-orm/node-postgres";
+import * as schema from "../../drizzle/schema"; // ensure this is an object of tables
 
-const schema = { ...AuthSchema, ...DBSchema }
+import type { NeonHttpDatabase } from "drizzle-orm/neon-http";
+import type { NodePgDatabase } from "drizzle-orm/node-postgres";
 
-let db: ReturnType<typeof drizzleNeon> | ReturnType<typeof drizzlePostgres>
+// Union type with your schema
+type DB = NeonHttpDatabase<typeof schema> | NodePgDatabase<typeof schema>;
+
+let db: DB;
 
 if (process.env.NODE_ENV === "production") {
-    const sql = neon(process.env.DATABASE_URL!)
-    db = drizzleNeon({ client: sql, schema: schema })
+  const sql = neon(process.env.DATABASE_URL!);
+  db = drizzleNeon({ client: sql, schema });
 } else {
-    db = drizzlePostgres({
-        connection: {
-            connectionString: process.env.DATABASE_URL!,
-        },
-        schema: schema,
-    })
+  db = drizzlePostgres({
+    connection: {
+      connectionString: process.env.DATABASE_URL!,
+    },
+    schema,
+  });
 }
 
-export default db
+export default db;

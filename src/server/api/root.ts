@@ -1,5 +1,5 @@
 // src/server/api/root.ts
-import { router, publicProcedure } from './trpc';
+import { router, publicProcedure } from '../trpc';
 import { z } from 'zod';
 
 export const appRouter = router({
