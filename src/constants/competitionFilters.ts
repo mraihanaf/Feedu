@@ -12,15 +12,12 @@ export const categories = {
         "Health",
         "Environment",
         "Sports",
-    ]
+    ],
 }
 
 export const sortOptions = {
     placeholder: "Sort by",
-    options: [
-        "Most Recent",
-        "Most Popular",
-    ]
+    options: ["Most Recent", "Most Popular"],
 }
 export const levels = {
     placeholder: "Filter by Level",
@@ -32,14 +29,10 @@ export const levels = {
         "Vocational High School",
         "Elementary School",
         "College",
-    ]
+    ],
 }
 
 export const fee = {
     placeholder: "Filter by Fee",
-    options: [
-        "All",
-        "Free",
-        "Paid",
-    ]
+    options: ["All", "Free", "Paid"],
 }

@@ -8,16 +8,13 @@ export const categories = {
         "Biology",
         "Mathematics",
         "Economics",
-        "History"
-    ]
+        "History",
+    ],
 }
 
 export const sortOptions = {
     placeholder: "Sort by",
-    options: [
-        "Most Recent",
-        "Most Popular",
-    ]
+    options: ["Most Recent", "Most Popular"],
 }
 export const levels = {
     placeholder: "Filter by Level",
@@ -28,5 +25,5 @@ export const levels = {
         "Vocational High School",
         "Elementary School",
         "College",
-    ]
+    ],
 }

@@ -1,18 +1,18 @@
 import { z } from "zod"
 import { router, publicProcedure } from "@/server/trpc"
-import { competitions } from "@/db/schema"
+import { events } from "@/db/schema"
 import { and, desc, ilike, lt, eq } from "drizzle-orm"
 import db from "@/db"
 import { sql } from "drizzle-orm"
 
-export const competitionsRouter = router({
-    getInfiniteCompetitions: publicProcedure
+export const eventsRouter = router({
+    getInfiniteEvents: publicProcedure
         .input(
             z.object({
                 limit: z.number().min(1).max(100).default(6),
                 cursor: z.string().optional(), // last ID from previous page
                 search: z.string().optional(),
-                level: z.union([z.string(), z.array(z.string())]).optional(),
+                audience: z.union([z.string(), z.array(z.string())]).optional(),
                 category: z.union([z.string(), z.array(z.string())]).optional(),
                 isPaid: z.boolean().optional(),
                 sort: z.enum(["newest", "oldest"]).optional(),
@@ -23,7 +23,7 @@ export const competitionsRouter = router({
                 limit,
                 cursor,
                 search,
-                level,
+                audience,
                 category,
                 isPaid,
                 sort = "newest",
@@ -32,19 +32,17 @@ export const competitionsRouter = router({
             const whereClauses = []
 
             if (search) {
-                whereClauses.push(
-                    ilike(competitions.competitionName, `%${search}%`),
-                )
+                whereClauses.push(ilike(events.eventName, `%${search}%`))
             }
 
-            if (level) {
-                if (Array.isArray(level)) {
+            if (audience) {
+                if (Array.isArray(audience)) {
                     whereClauses.push(
-                        sql`EXISTS (SELECT 1 FROM unnest(lower(${competitions.level})) AS l WHERE l = ANY(${level.map((v) => v.toLowerCase())}))`,
+                        sql`EXISTS (SELECT 1 FROM unnest(lower(${events.audience})) AS a WHERE a = ANY(${audience.map((v) => v.toLowerCase())}))`,
                     )
                 } else {
                     whereClauses.push(
-                        sql`EXISTS (SELECT 1 FROM unnest(lower(${competitions.level})) AS l WHERE l = lower(${level}))`,
+                        sql`EXISTS (SELECT 1 FROM unnest(lower(${events.audience})) AS a WHERE a = lower(${audience}))`,
                     )
                 }
             }
@@ -52,21 +50,21 @@ export const competitionsRouter = router({
             if (category) {
                 if (Array.isArray(category)) {
                     whereClauses.push(
-                        sql`EXISTS (SELECT 1 FROM unnest(lower(${competitions.category})) AS c WHERE c = ANY(${category.map((v) => v.toLowerCase())}))`,
+                        sql`EXISTS (SELECT 1 FROM unnest(lower(${events.category})) AS c WHERE c = ANY(${category.map((v) => v.toLowerCase())}))`,
                     )
                 } else {
                     whereClauses.push(
-                        sql`EXISTS (SELECT 1 FROM unnest(lower(${competitions.category})) AS c WHERE c = lower(${category}))`,
+                        sql`EXISTS (SELECT 1 FROM unnest(lower(${events.category})) AS c WHERE c = lower(${category}))`,
                     )
                 }
             }
 
             if (typeof isPaid === "boolean") {
-                whereClauses.push(eq(competitions.isPaid, isPaid))
+                whereClauses.push(eq(events.isPaid, isPaid))
             }
 
             if (cursor) {
-                whereClauses.push(lt(competitions.id, cursor))
+                whereClauses.push(lt(events.id, cursor))
             }
 
             const where =
@@ -74,11 +72,9 @@ export const competitionsRouter = router({
 
             const results = await db
                 .select()
-                .from(competitions)
+                .from(events)
                 .where(where)
-                .orderBy(
-                    sort === "newest" ? desc(competitions.id) : competitions.id,
-                )
+                .orderBy(sort === "newest" ? desc(events.id) : events.id)
                 .limit(limit + 1) // fetch one more to check if there's next page
 
             const hasNextPage = results.length > limit

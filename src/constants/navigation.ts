@@ -1,4 +1,4 @@
-import { BookIcon, HomeIcon, TrophyIcon, UsersIcon } from "lucide-react"
+import { TrophyIcon, UsersIcon } from "lucide-react"
 
 import type { LucideIcon } from "lucide-react"
 
@@ -12,11 +12,6 @@ type NavigationItems = NavigationItem[]
 
 export const navigationItems: NavigationItems = [
     {
-        title: "Home",
-        icon: HomeIcon,
-        url: "/home",
-    },
-    {
         title: "Discover Competitions",
         icon: TrophyIcon,
         url: "/competitions",
@@ -25,10 +20,5 @@ export const navigationItems: NavigationItems = [
         title: "Discover Events",
         icon: UsersIcon,
         url: "/events",
-    },
-    {
-        title: "Notes",
-        icon: BookIcon,
-        url: "/notes",
     },
 ]

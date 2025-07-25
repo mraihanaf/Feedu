@@ -1,20 +1,17 @@
 export const categories = {
     placeholder: "Filter by Category",
     options: [
-       "All Categories",
-       "Workshops",
-       "Seminars",
-       "Conferences",
-       "Webinars"
-    ]
+        "All Categories",
+        "Workshops",
+        "Seminars",
+        "Conferences",
+        "Webinars",
+    ],
 }
 
 export const sortOptions = {
     placeholder: "Sort by",
-    options: [
-        "Most Recent",
-        "Most Popular",
-    ]
+    options: ["Most Recent", "Most Popular"],
 }
 export const audience = {
     placeholder: "Filter by Audience",
@@ -25,15 +22,11 @@ export const audience = {
         "Vocational High School",
         "Elementary School",
         "College",
-        "General Public"
-    ]
+        "General Public",
+    ],
 }
 
 export const fee = {
     placeholder: "Filter by Fee",
-    options: [
-        "All",
-        "Free",
-        "Paid",
-    ]
+    options: ["All", "Free", "Paid"],
 }

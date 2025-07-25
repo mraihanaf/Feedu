@@ -7,7 +7,6 @@ import {
     CardHeader,
     CardTitle,
 } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
 import { MobileSidebar } from "@/components/layouts/Sidebars/Mobile"
 import { DesktopSidebar } from "@/components/layouts/Sidebars/Desktop"
 import { useSession } from "@/lib/auth-client"
@@ -32,7 +31,8 @@ export default function HomePage() {
                                     Hello, {data?.user.name}.
                                 </h2>
                                 <p className="text-base md:text-lg text-muted-foreground">
-                                Welcome to Feedu — The Student{"'"}s Hub for Competitions, Events, and Shared Notes.
+                                    Welcome to Feedu — The Student{"'"}s Hub for
+                                    Competitions, Events, and Shared Notes.
                                 </p>
                             </div>
 

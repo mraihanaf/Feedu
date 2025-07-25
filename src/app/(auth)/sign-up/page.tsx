@@ -231,7 +231,8 @@ export default function SignUpForm() {
                                                 try {
                                                     await signIn.social({
                                                         provider: "google",
-                                                        callbackURL: "/home",
+                                                        callbackURL:
+                                                            "/competitions",
                                                     })
                                                 } catch {
                                                     form.setError("root", {

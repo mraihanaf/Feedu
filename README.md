@@ -14,9 +14,11 @@
 ### 2. Notes Sharing
 
 ## Developments
+
 ```bash
 cp .env.example .env.local
 ```
+
 ```
 BETTER_AUTH_SECRET="pirDTqonOR8Xayxt6x7UpTFgKFzjiQgW"
 BETTER_AUTH_URL="http://localhost:3000"
@@ -29,7 +31,7 @@ SMTP_PORT="8025"
 SMTP_USER="testuser"
 SMTP_PASS="testuser"
 
-S3_ENDPOINT="localhost:9000"      
+S3_ENDPOINT="localhost:9000"
 S3_REGION="us-west-1"
 S3_BUCKET="feedu"
 S3_ACCESS_KEY_ID="minioadmin"
@@ -38,6 +40,7 @@ S3_FORCE_PATH_STYLE="true" # Needed for MinIO or some S3-compatible APIs
 
 NODE_ENV="development"
 ```
+
 ```bash
 docker compose up
 ```

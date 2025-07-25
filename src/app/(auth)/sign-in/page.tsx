@@ -29,7 +29,7 @@ export default function LoginForm() {
         try {
             await signIn.social({
                 provider: "google",
-                callbackURL: "/home",
+                callbackURL: "/competitions",
             })
         } catch (err) {
             console.error(err)
@@ -46,7 +46,7 @@ export default function LoginForm() {
             const user = await signIn.email({
                 email: email,
                 password: password,
-                callbackURL: "/home",
+                callbackURL: "/competitions",
             })
             if (!user.data) return setError("Wrong Email or Password.")
         } catch (err) {

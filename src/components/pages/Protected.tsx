@@ -28,5 +28,5 @@ export default function ProtectedPage({
         return data ? children : redirect("/sign-in")
     }
 
-    return data ? redirect("/home") : children
+    return data ? redirect("/competitions") : children
 }
